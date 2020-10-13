@@ -1,0 +1,27 @@
+trigger:
+- master
+
+stages:
+  - stage: build
+    jobs:
+      - job: 'build'
+        pool: 
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: pom.xml
+              goals: package
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'         
+              
+  - stage: deploy
+    jobs:
+      - job: 'installanduseterraform'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - script: echo 'install terrform'
+          - script: echo 'executing terraform apply command'  
